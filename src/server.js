@@ -50,7 +50,6 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(specs))
   .use(urlencoded({ extended: true }))
   .use(express.static(__dirname + "/public"))
   .use(morgan("dev"))
-  //.use(helmet()) // no funciona toa
   .use(cookieParser())
   .use(session(mongoStoreOptions))
   .use(passport.initialize())

@@ -52,7 +52,7 @@ export default class UserDaoFS {
             const user = usersFile.find((u) => u.id === id);
             if (user) return user
             else return false;
-            //    user ? user : false
+            // return user ? user : false
         } catch (error) {
             log.fatal(error.message);
         }

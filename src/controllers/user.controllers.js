@@ -55,10 +55,22 @@ export default class userController extends Controllers {
     premium = async (req, res, next) => {
         try {
             const { uid } = req.params;
-            const user = await userService.getById(uid);
+            let user = await userService.getById(uid);
             if (!user) return http.NotFound(res, dictionaryError.NOT_FOUND)
-            if (user.role === 'user') user.role = 'premium';
-            else if (user.role === 'premium') user.role = 'user';
+
+            const doc1 = user.documents.some((element) => element.name.match('document'));
+            const doc2 = user.documents.some((element) => element.name.match('address'));
+            const doc3 = user.documents.some((element) => element.name.match('stateAccount'));
+
+            if (user.role === 'premium') {
+                user.role = 'user';
+                user.save();
+                return http.Ok(res, user);
+            }
+            if (!(doc1 && doc2 && doc3)) {
+                user = user.toObject();
+                return res.render('documents', { msg: "No ha terminado de procesar su documentación", user })
+            } else if (doc1 && doc2 && doc3 && user.role === 'user') user.role = 'premium';
             user.save();
             return http.Ok(res, user);
         } catch (error) {

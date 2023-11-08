@@ -136,8 +136,13 @@ router.post("/register", (req, res, next) => {
   })(req, res, next)
 })
 
-router.get('/logout', (req, res) => {
-  req.session.destroy();
+router.get('/logout', async (req, res) => {
+  const user = await userService.getByEmail(req.user?.email);
+  if (user) {
+    user.last_connection = Date.now();
+    user.save();
+    req.session.destroy();
+  }
   return res.render('login', { msg: 'Se cerro la sesion correctamente.', alert: 'success' })
 })
 

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-//import { emailPurchase } from "../../../controllers/email.controller.js";
 import log from "../../../utils/logger.js";
 import { CartModel } from "./models/cart.model.js";
 import { ProductModel } from "./models/product.model.js";

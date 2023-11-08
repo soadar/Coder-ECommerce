@@ -22,7 +22,7 @@ export default class CartDaoMongoDB extends MySQLDao {
             log.fatal(error.message);
         }
     }
-    //falta migrar
+
     async update(cid, pid) {
         try {
             if (cid.length != 24 || pid.length != 24) {
@@ -65,7 +65,6 @@ export default class CartDaoMongoDB extends MySQLDao {
         }
     }
 
-    //faltan todos los de abajo
     async updateCant(cid, pid, cant) {
         try {
             if (cid.length != 24 || pid.length != 24) {

@@ -15,6 +15,8 @@ const login = async (req, email, password, done) => {
     try {
         const user = { email, password };
         const userLogin = await userDao.loginUser(user);
+        userLogin.last_connection = Date.now();
+        userLogin.save();
         if (!userLogin) return done(null, false, { message: 'User not found' });
         else return done(null, userLogin);
     } catch (error) {

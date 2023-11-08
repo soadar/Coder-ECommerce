@@ -1,5 +1,3 @@
-//npm i jest supertest
-
 import { faker } from '@faker-js/faker';
 import request from 'supertest';
 import "../../src/persistence/daos/factory.js";
@@ -55,14 +53,8 @@ describe('Tests integrales Api E-Commerce [Sessions]', () => {
             password: '99'
         }
         const response = await request(app).post(`/api/sessions/login`).send(userTest);;
-        // expect(id).toBeDefined();
-        // expect(response.status).toBe(200);
-        // expect(response.body).toHaveProperty('data');
-        // expect(response.body.data).toBeInstanceOf(Object);
         expect(response.status).toBe(200);
         expect(response.body.data).toEqual('Login ok');
-        // expect(id).toBe(response.body.data._id);
-        // expect(response.body.data.role).toMatch(/^(premium|user)$/)
         const userFail = {
             email: '999@999',
             password: '999'
