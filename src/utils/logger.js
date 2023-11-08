@@ -66,10 +66,11 @@ logger.add('prod', {
 });
 
 
-if (process.env?.MODE === 'prod') var log = logger.get('prod');
-else if (process.env?.MODE === 'dev') var log = logger.get('dev');
+//if (process.env?.MODE === 'prod') var log = logger.get('prod');
+//else if (process.env?.MODE === 'dev') var log = logger.get('dev');
 
-log.info(process.env?.MODE);
-//process.env.MODE ? log.info(process.env.MODE) : log.info(process.env.MODE)
+const mode = process.env?.MODE ? process.env.MODE : "dev";
+log = logger.get(mode);
+log.info(mode);
 
 export default log;
