@@ -70,7 +70,7 @@ logger.add('prod', {
 //else if (process.env?.MODE === 'dev') var log = logger.get('dev');
 
 const mode = process.env?.MODE ? process.env.MODE : "dev";
-log = logger.get(mode);
+const log = logger.get(mode);
 log.info(mode);
 
 export default log;
