@@ -18,8 +18,8 @@ export default class productController extends Controllers {
         try {
             const response = await productService.getAll(page, limit, sort, query);
             if (!response) return http.NotFound(res, dictionaryError.NOT_FOUND);
-            const next = response.hasNextPage ? `http://localhost:8080/api/products?page=${response.nextPage}` : null;
-            const prev = response.hasPrevPage ? `http://localhost:8080/api/products?page=${response.prevPage}` : null;
+            const next = response.hasNextPage ? `${process.env.APPURL}/api/products?page=${response.nextPage}` : null;
+            const prev = response.hasPrevPage ? `${process.env.APPURL}/api/products?page=${response.prevPage}` : null;
             res.status(200).json({
                 status: "success",
                 payload: response.docs,

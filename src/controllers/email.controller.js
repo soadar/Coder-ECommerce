@@ -26,7 +26,7 @@ export const emailRecoverPass = async (user, token) => {
             subject: 'Recuperar contraseña',
             html: `<h1>Hola ${user.last_name}, ${user.first_name}. 
             Para recuperar tu contraseña, ingresa al siguiente link!</h1>
-            <a href="http://localhost:8080/reset-password?token=${token}" target="_blank" style="color:white; background-color:blue; text-decoration:none; font-size:22px; padding:20px; border-radius:5px" >Recuperar</a>
+            <a href="${process.env.APPURL}/reset-password?token=${token}" target="_blank" style="color:white; background-color:blue; text-decoration:none; font-size:22px; padding:20px; border-radius:5px" >Recuperar</a>
             `
         };
 

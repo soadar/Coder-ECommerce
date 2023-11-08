@@ -81,15 +81,15 @@ router.get('/products', validateLogin, async (req, res) => {
     }
   }
 
-  let next = response.hasNextPage ? `http://localhost:8080/products?page=${response.nextPage}` : null;
-  let prev = response.hasPrevPage ? `http://localhost:8080/products?page=${response.prevPage}` : null;
+  let next = response.hasNextPage ? `${process.env.APPURL}/products?page=${response.nextPage}` : null;
+  let prev = response.hasPrevPage ? `${process.env.APPURL}/products?page=${response.prevPage}` : null;
   if (flag === 1) {
-    next = response.hasNextPage ? `http://localhost:8080/products?${params}page=${response.nextPage}` : null;
-    prev = response.hasPrevPage ? `http://localhost:8080/products?${params}page=${response.prevPage}` : null;
+    next = response.hasNextPage ? `${process.env.APPURL}/products?${params}page=${response.nextPage}` : null;
+    prev = response.hasPrevPage ? `${process.env.APPURL}/products?${params}page=${response.prevPage}` : null;
   }
   if (flag === 1 && limit !== 10) {
-    prev = response.hasPrevPage ? `http://localhost:8080/products?${params}page=${response.prevPage}&limit=${limit}` : null;
-    next = response.hasNextPage ? `http://localhost:8080/products?${params}page=${response.nextPage}&limit=${limit}` : null;
+    prev = response.hasPrevPage ? `${process.env.APPURL}/products?${params}page=${response.prevPage}&limit=${limit}` : null;
+    next = response.hasNextPage ? `${process.env.APPURL}/products?${params}page=${response.nextPage}&limit=${limit}` : null;
   }
 
   res.render('products', {
@@ -106,6 +106,7 @@ router.get('/products', validateLogin, async (req, res) => {
     next,
     prev,
     info: req.user,
+    APPURL: process.env.APPURL,
     cart: req.user.cart._id
   })
 });
