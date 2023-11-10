@@ -11,8 +11,17 @@ export default class ProductRepository {
     async getByIdDTO(id) {
         try {
             const response = await this.dao.getById(id);
-            const aux = new UserResDTO(response)
             return new UserResDTO(response);
+        } catch (error) {
+            log.fatal(error.message);
+        }
+    }
+
+    async getAllDTO() {
+        try {
+            const response = await this.dao.getAll();
+            const userDtos = response.map((user) => new UserResDTO(user));
+            return userDtos;
         } catch (error) {
             log.fatal(error.message);
         }

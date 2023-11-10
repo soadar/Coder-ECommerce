@@ -6,7 +6,12 @@ const http = new HttpResponse();
 import ProductService from "../services/product.services.js";
 const productService = new ProductService();
 
+import UserService from "../services/user.services.js";
+const userService = new UserService();
+
 import Controllers from "./class.controller.js";
+import { emailProductRemoved } from "./email.controller.js";
+
 
 export default class productController extends Controllers {
     constructor() {
@@ -18,8 +23,8 @@ export default class productController extends Controllers {
         try {
             const response = await productService.getAll(page, limit, sort, query);
             if (!response) return http.NotFound(res, dictionaryError.NOT_FOUND);
-            const next = response.hasNextPage ? `${process.env.APPURL}/api/products?page=${response.nextPage}` : null;
-            const prev = response.hasPrevPage ? `${process.env.APPURL}/api/products?page=${response.prevPage}` : null;
+            const next = response.hasNextPage ? `/api/products?page=${response.nextPage}` : null;
+            const prev = response.hasPrevPage ? `/api/products?page=${response.prevPage}` : null;
             res.status(200).json({
                 status: "success",
                 payload: response.docs,
@@ -49,7 +54,7 @@ export default class productController extends Controllers {
         } catch (error) {
             next(error);
         }
-    }
+    };
 
     create = async (req, res, next) => {
         try {
@@ -63,19 +68,24 @@ export default class productController extends Controllers {
         } catch (error) {
             next(error);
         }
-    }
+    };
 
     remove = async (req, res, next) => {
         try {
             const { id } = req.params;
             const product = await this.service.getById(id);
+
             if (!product) return http.NotFound(res, dictionaryError.NOT_FOUND);
-            if (req.user?.role === 'premium' && req.user?.email !== product.owner) return http.Unauthorized(res, 'Unauthorized')
+            if (product.owner !== 'admin') {
+                const user = await userService.getByEmail(product.owner)
+                if (user) {
+                    emailProductRemoved(user, product)
+                }
+            }
             const del = await this.service.remove(id);
             return http.Ok(res, del);
-
         } catch (error) {
             next(error);
-        }
-    };
+        };
+    }
 }

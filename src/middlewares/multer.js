@@ -12,13 +12,12 @@ const storage = multer.diskStorage({
                 folder += 'products'
                 break;
             case 'document':
-            case 'address':
-            case 'stateAccount':
                 folder += 'documents'
                 break;
         }
         cb(null, __dirname + folder)
     },
+    
     filename: function (req, file, cb) {
         cb(null, `${Date.now()}${Math.floor(Math.random() * 10)}.${file.originalname.slice(-3)}`)
     }

@@ -78,6 +78,17 @@ export default class userController extends Controllers {
         }
     };
 
+    deleteInactives = async (req, res, next) => {
+        try {
+            const response = await userService.deleteInactives();
+            if (!response) return http.NotFound(res, dictionaryError.NOT_FOUND);
+            else return http.Ok(res, response);
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
     getByIdDTO = async (req, res, next) => {
         try {
             if (req.user) {
@@ -86,6 +97,16 @@ export default class userController extends Controllers {
                 if (!response) return http.NotFound(res, dictionaryError.NOT_FOUND);
                 else return http.Ok(res, response);
             }
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    getAllDTO = async (req, res, next) => {
+        try {
+            const response = await userService.getAllDTO();
+            if (!response) return http.NotFound(res, dictionaryError.NOT_FOUND);
+            else return http.Ok(res, response);
         } catch (error) {
             next(error);
         }

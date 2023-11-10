@@ -66,9 +66,6 @@ logger.add('prod', {
 });
 
 
-//if (process.env?.MODE === 'prod') var log = logger.get('prod');
-//else if (process.env?.MODE === 'dev') var log = logger.get('dev');
-
 const mode = process.env?.MODE ? process.env.MODE : "dev";
 const log = logger.get(mode);
 log.info(mode);

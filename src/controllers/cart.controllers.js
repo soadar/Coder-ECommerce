@@ -81,13 +81,38 @@ export default class CartController extends Controllers {
 
             const total = await cartService.purchase(cid);
             if (!total) return http.NotFound(res, dictionaryError.STOCK);
-
             const response = await TicketModel.create({
                 code: generarStringAleatorio(),
                 amount: total,
                 purchaser: user.email
             });
             return http.Ok(res, response);
+        } catch (error) {
+            log.fatal(error);
+        }
+    };
+
+    purchaseView = async (req, res) => {
+        try {
+            const { cid } = req.params;
+
+            const user = await cartService.getByCart(cid)
+            if (!user) return http.NotFound(res, dictionaryError.CART_INTO_USER);
+
+            const total = await cartService.purchase(cid);
+            if (!total) return http.NotFound(res, dictionaryError.STOCK);
+
+            const date = new Intl.DateTimeFormat("es-AR", {
+                dateStyle: "long",
+                timeStyle: "long"
+            }).format(new Date());
+
+            const response = await TicketModel.create({
+                code: generarStringAleatorio(),
+                amount: total,
+                purchaser: user.email
+            });
+            return response;
         } catch (error) {
             log.fatal(error);
         }

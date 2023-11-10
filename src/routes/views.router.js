@@ -3,9 +3,6 @@ import jwt from 'jsonwebtoken';
 import passport from "passport";
 import { isAdmin, isUser, noLogAgain, validateLogin } from "../middlewares/errorHandler.js";
 
-import CartManager from "../persistence/daos/mongodb/cart.dao.js";
-const cartManager = new CartManager();
-
 import ProductMockManager from "../persistence/daos/mongodb/product.mock.dao.js";
 const productMockManager = new ProductMockManager();
 
@@ -15,8 +12,17 @@ const productService = new ProductService();
 import UserService from "../services/user.services.js";
 const userService = new UserService();
 
+import CartService from "../services/cart.services.js";
+const cartService = new CartService();
+
+import TicketService from "../services/ticket.services.js";
+const ticketService = new TicketService();
+
 import { HttpResponse } from "../utils/http.response.js";
 const http = new HttpResponse();
+
+import CartController from "../controllers/cart.controllers.js";
+const cartController = new CartController()
 
 import { emailRecoverPass } from "../controllers/email.controller.js";
 import dictionaryError from "../utils/errors.dictionary.js";
@@ -41,14 +47,14 @@ router.get("/realtimeproducts", async (req, res) => {
 router.get("/carts/:cid", validateLogin, async (req, res, next) => {
   try {
     const { cid } = req.params;
-    const cart = await cartManager.getById(cid);
+    const cart = await cartService.getById(cid);
     if (!cart) return http.NotFound(res, dictionaryError.NOT_FOUND);
 
     const prods = [];
     cart.products.forEach((e) => {
       prods.push(e._id);
     })
-    res.render("cart", { prods });
+    res.render("cart", { prods, cid });
   } catch (error) {
     log.fatal(error.message);
   }
@@ -81,15 +87,15 @@ router.get('/products', validateLogin, async (req, res) => {
     }
   }
 
-  let next = response.hasNextPage ? `${process.env.APPURL}/products?page=${response.nextPage}` : null;
-  let prev = response.hasPrevPage ? `${process.env.APPURL}/products?page=${response.prevPage}` : null;
+  let next = response.hasNextPage ? `/products?page=${response.nextPage}` : null;
+  let prev = response.hasPrevPage ? `/products?page=${response.prevPage}` : null;
   if (flag === 1) {
-    next = response.hasNextPage ? `${process.env.APPURL}/products?${params}page=${response.nextPage}` : null;
-    prev = response.hasPrevPage ? `${process.env.APPURL}/products?${params}page=${response.prevPage}` : null;
+    next = response.hasNextPage ? `/products?${params}page=${response.nextPage}` : null;
+    prev = response.hasPrevPage ? `/products?${params}page=${response.prevPage}` : null;
   }
   if (flag === 1 && limit !== 10) {
-    prev = response.hasPrevPage ? `${process.env.APPURL}/products?${params}page=${response.prevPage}&limit=${limit}` : null;
-    next = response.hasNextPage ? `${process.env.APPURL}/products?${params}page=${response.nextPage}&limit=${limit}` : null;
+    prev = response.hasPrevPage ? `/products?${params}page=${response.prevPage}&limit=${limit}` : null;
+    next = response.hasNextPage ? `/products?${params}page=${response.nextPage}&limit=${limit}` : null;
   }
 
   res.render('products', {
@@ -205,11 +211,56 @@ router.get('/reset-password', async (req, res) => {
 
 router.post('/changePass', async (req, res) => {
   const { email, password } = req.body;
-
   const response = await userService.recoverPass(email, password);
   if (response === 2) return res.render('login', { msg: 'Esta ingresando la contraseña actual.', alert: 'danger' })
   if (response === 3) return res.render('login', { msg: 'El usuario no se encuentra registrado.', alert: 'success' })
   res.render('login', { msg: 'Contraseña modificada con exito, ya puedes iniciar sesion.', alert: 'success' })
+});
+
+router.get('/users', isAdmin, async (req, res) => {
+  let users = await userService.getAllDTO()
+  res.render('users', { users });
+});
+
+router.post('/modusers', async (req, res) => {
+  const { action } = req.body;
+  const { email } = req.query
+  if (email) {
+    const user = await userService.getByEmail(email)
+    if (action === 'mod') {
+      user.role = user.role === 'admin' ? 'user' : 'admin';
+      user.save();
+    } else if (action === 'del') {
+      await userService.remove(user._id)
+    }
+  }
+  setTimeout(() => {
+    res.redirect('/users')
+  }, 100)
+});
+
+router.get('/removeProd', async (req, res) => {
+  const { cid, pid } = req.query;
+  const resp = await cartService.delProdInCart(cid, pid)
+  res.redirect(`/carts/${cid}`);
+});
+
+router.get('/vaciarChango/:cid', async (req, res) => {
+  const { cid } = req.params;
+  const resp = await cartService.delProdsInCart(cid);
+  res.redirect(`/carts/${cid}`);
+});
+
+router.get('/ticket/:cid', async (req, res) => {
+  const response = await cartController.purchaseView(req, res);
+  res.redirect(`/ticketView?ticketId=${response._id}`);
+});
+
+router.get('/ticketView', async (req, res) => {
+  const { ticketId } = req.query;
+  let ticket = await ticketService.getById(ticketId);
+  ticket = ticket.toObject();
+  res.render('ticket', { ticket });
 });
 
 export default router;

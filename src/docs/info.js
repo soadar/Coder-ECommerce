@@ -8,7 +8,12 @@ export const info = {
         },
         servers: [
             {
-                url: process.env.APPURL
+                url: process.env.APPURL,
+                description: "Live Server"
+            },
+            {
+                url: "http://localhost:8080",
+                description: "Local Server"
             }
         ]
     },

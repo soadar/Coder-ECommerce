@@ -55,15 +55,30 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(specs))
   .use(passport.initialize())
   .use(passport.session())
 
-  .engine("handlebars", handlebars.engine())
+  // app.engine('hbs', handlebars.engine({
+  //   helpers: {
+  //     isdefined: function (value) {
+  //       return value !== undefined;
+  //     }
+  //   }
+  // }));
+
+  .engine("handlebars", handlebars.engine({
+    helpers: {
+      checkAdmin: function (value) {
+        return value === 'admin';
+      }
+    }
+  }))
   .set("view engine", "handlebars")
   .set("views", __dirname + "/views")
-  .use('/api/users', userRouter)
-  .use('/api/products', productRouter)
-  .use('/api/sessions', userRouter)
   .use('/api/carts', cartRouter)
+  .use('/api/sessions', userRouter)
+  .use('/api/products', productRouter)
+  .use('/api/users', userRouter)
   .use('/email', emailRouter)
   .use("/", viewsRouter)
+
   .use(errorHandler)
 
 const PORT = config.PORT || 8080

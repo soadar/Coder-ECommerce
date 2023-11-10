@@ -57,9 +57,30 @@ export default class UserService extends Services {
             log.fatal(error.message);
         }
     }
+
+    getAllDTO = async () => {
+        try {
+            const response = await userRepository.getAllDTO();
+            if (!response) return false;
+            else return response;
+        } catch (error) {
+            log.fatal(error.message);
+        }
+    }
+
+
     recoverPass = async (email, password) => {
         try {
             const response = await userDao.recoverPass(email, password);
+            return response;
+        } catch (error) {
+            log.fatal(error.message);
+        }
+    };
+
+    deleteInactives = async () => {
+        try {
+            const response = await userDao.deleteInactives();
             return response;
         } catch (error) {
             log.fatal(error.message);

@@ -11,6 +11,9 @@
           <p class="m-0"><strong>Age</strong> {{this.age}}</p>
         {{/unless}}
         <p class="m-0"><strong>Rol</strong> {{this.role}}</p>
+        {{#if (checkAdmin this.role)}}
+          <a href="/users" class="btn btn-success mt-3">Modificar roles</a>
+        {{/if}}
       {{/if}}
     {{/each}}
   </div>

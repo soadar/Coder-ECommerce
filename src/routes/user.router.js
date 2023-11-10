@@ -16,15 +16,33 @@ const userService = new UserService();
 
 const router = Router();
 
-router.post("/login", (req, res, next) => {
-    passport.authenticate('login', (err, user) => {
-        if (!user) {
-            return http.Unauthorized(res, 'Unauthorized')
-        } else {
-            return http.Ok(res, 'Login ok');
-        }
-    })(req, res, next)
+// router.post("/login",
+//     passport.authenticate('login', {
+//         failureRedirect: "/login?error=ok",
+//         successRedirect: "/login?error=fail"
+//     })
+// )
+
+router.post("/login",
+    passport.authenticate('login', {
+        successRedirect: false,
+        failureRedirect: false,
+    }),
+    async (req, res) => {
+        if (req.user) return http.Ok(res, 'Login ok');
+        else return http.Unauthorized(res, 'Unauthorized');
+    }
+)
+
+router.get('/login', (req, res) => {
+    const { error } = req.query;
+    if (error === 'fail') return http.Unauthorized(res, 'Unauthorized')
+    else return http.Ok(res, 'Login ok');
 })
+
+router.get('/', userController.getAllDTO);
+
+router.delete('/users', userController.deleteInactives);
 
 router.get('/current', validateLogin, userController.getByIdDTO);
 
@@ -43,26 +61,18 @@ router.post('/:uid/documents', validateLogin, cpUpload, async (req, res, next) =
         const user = await userService.getByEmail(req.user.email);
         if (req.files['profile']) {
             const profile = req.files['profile'][0]
-            console.log(profile);
-
             user.documents.push({ name: profile.filename, reference: profile.path });
         }
         if (req.files['document']) {
             const document = req.files['document'][0]
-            console.log(document);
-
             user.documents.push({ name: `document_${document.filename}`, reference: document.path });
         }
         if (req.files['address']) {
             const address = req.files['address'][0]
-            console.log(address);
-
             user.documents.push({ name: `address_${address.filename}`, reference: address.path });
         }
         if (req.files['stateAccount']) {
             const stateAccount = req.files['stateAccount'][0]
-            console.log(stateAccount);
-
             user.documents.push({ name: `stateAccount_${stateAccount.filename}`, reference: stateAccount.path });
         }
         user.save();

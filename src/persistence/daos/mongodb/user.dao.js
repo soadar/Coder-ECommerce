@@ -88,4 +88,16 @@ export default class UserDaoMongo extends MongoDao {
             log.fatal(error.message);
         }
     };
+
+    async deleteInactives() {
+        try {
+            const tiempoInactividad = new Date(new Date().setDate(new Date().getDate() - 2));
+            //const tiempoInactividad = new Date(new Date().setMinutes(new Date().getMinutes() - 10)); //
+            const userExist = await this.model.deleteMany({ last_connection: { $lt: tiempoInactividad } });
+
+            return userExist ? userExist : false;
+        } catch (error) {
+            log.fatal(error.message);
+        }
+    };
 }
