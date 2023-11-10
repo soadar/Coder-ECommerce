@@ -3,7 +3,11 @@
   href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
 />
 
-<main class="form-signin w-25 m-auto mt-5">
+<div class="text-center d-flex justify-content-around m-5">
+  <a href="/products" class="btn btn-primary">Volver</a>
+</div>
+
+<main class="form-signin w-25 m-auto">
   <h1 class="h3 mb-3 fw-normal text-center">Recuperar contraseña</h1>
 
   {{#if msg}}
@@ -13,7 +17,7 @@
   {{/if}}
 
   <form action="/recoverPass" method="post">
-    <div class="form-floating mt-4">
+    <div class="form-floating">
       <input
         type="email"
         class="form-control"
