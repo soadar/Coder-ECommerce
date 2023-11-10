@@ -38,7 +38,8 @@ const mongoStoreOptions = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 300000 //5 min
+    //maxAge: 300000 //5 min
+    maxAge: 900000 // 15 min
   }
 };
 
@@ -55,19 +56,14 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(specs))
   .use(passport.initialize())
   .use(passport.session())
 
-  // app.engine('hbs', handlebars.engine({
-  //   helpers: {
-  //     isdefined: function (value) {
-  //       return value !== undefined;
-  //     }
-  //   }
-  // }));
-
   .engine("handlebars", handlebars.engine({
     helpers: {
       checkAdmin: function (value) {
         return value === 'admin';
-      }
+      },
+      checkPrem: function (value) {
+        return value === 'premium';
+      },
     }
   }))
   .set("view engine", "handlebars")

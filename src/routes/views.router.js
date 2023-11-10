@@ -51,10 +51,16 @@ router.get("/carts/:cid", validateLogin, async (req, res, next) => {
     if (!cart) return http.NotFound(res, dictionaryError.NOT_FOUND);
 
     const prods = [];
-    cart.products.forEach((e) => {
-      prods.push(e._id);
+    cart.products.forEach(async (e) => {
+      let prod = await productService.getById(e._id);
+      prod = prod.toObject();
+      prod.quantity = e.quantity;
+      prods.push(prod);
     })
-    res.render("cart", { prods, cid });
+    setTimeout(() => {
+      res.render("cart", { prods, cid });
+    }, 100)
+
   } catch (error) {
     log.fatal(error.message);
   }
@@ -261,6 +267,31 @@ router.get('/ticketView', async (req, res) => {
   let ticket = await ticketService.getById(ticketId);
   ticket = ticket.toObject();
   res.render('ticket', { ticket });
+});
+
+router.get('/premium/:uid', async (req, res) => {
+  const { uid } = req.params;
+  let user = await userService.getById(uid);
+  if (user.role === 'premium') {
+    user.role = 'user';
+    user.save();
+    setTimeout(() => {
+      res.redirect('/products')
+    }, 100)
+  }
+
+  const doc1 = user.documents.some((element) => element.name.match('document'));
+  const doc2 = user.documents.some((element) => element.name.match('address'));
+  const doc3 = user.documents.some((element) => element.name.match('stateAccount'));
+
+  if (!(doc1 && doc2 && doc3)) {
+    user = user.toObject();
+    return res.render('documents', { msg: "Falta cargar o procesar documentación", user })
+  } else if (doc1 && doc2 && doc3 && user.role === 'user') user.role = 'premium';
+  user.save();
+  setTimeout(() => {
+    res.redirect('/products')
+  }, 100)
 });
 
 export default router;

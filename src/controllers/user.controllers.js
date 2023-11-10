@@ -69,7 +69,7 @@ export default class userController extends Controllers {
             }
             if (!(doc1 && doc2 && doc3)) {
                 user = user.toObject();
-                return res.render('documents', { msg: "No ha terminado de procesar su documentación", user })
+                return res.render('documents', { msg: "Falta cargar o procesar documentación", user })
             } else if (doc1 && doc2 && doc3 && user.role === 'user') user.role = 'premium';
             user.save();
             return http.Ok(res, user);

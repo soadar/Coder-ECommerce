@@ -13,15 +13,7 @@ import { validateLogin } from "../middlewares/errorHandler.js";
 import UserService from "../services/user.services.js";
 const userService = new UserService();
 
-
 const router = Router();
-
-// router.post("/login",
-//     passport.authenticate('login', {
-//         failureRedirect: "/login?error=ok",
-//         successRedirect: "/login?error=fail"
-//     })
-// )
 
 router.post("/login",
     passport.authenticate('login', {
@@ -42,7 +34,7 @@ router.get('/login', (req, res) => {
 
 router.get('/', userController.getAllDTO);
 
-router.delete('/users', userController.deleteInactives);
+router.delete('/', userController.deleteInactives);
 
 router.get('/current', validateLogin, userController.getByIdDTO);
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { isUser, isUserOrPrem } from "../middlewares/errorHandler.js";
+import { isUser } from "../middlewares/errorHandler.js";
 
 import CartController from '../controllers/cart.controllers.js';
 const cartController = new CartController();
@@ -13,7 +13,7 @@ router
     .get('/:id', cartController.getById)
     .delete('/:cid', cartController.delProdsInCart)
 
-    .post('/:cid/products/:pid', isUserOrPrem, cartController.update)
+    .post('/:cid/products/:pid', isUser, cartController.update)
     .put('/:cid/products/:pid', isUser, cartController.updateCant)
     .delete('/:cid/products/:pid', cartController.delProdInCart)
 

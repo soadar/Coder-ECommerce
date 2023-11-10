@@ -1,9 +1,13 @@
-<main class="form-signin w-25 m-auto mt-5">
+<div class="text-center d-flex justify-content-around m-5">
+  <a href="/products" class="btn btn-primary">Volver</a>
+</div>
+
+<main class="form-signin w-25 m-auto">
 
   <h1 class="h3 mb-3 fw-normal text-center">Subir documentos</h1>
 
   {{#if user}}
-    <div class="alert alert-danger text-center" role="alert">
+    <div class="alert alert-info text-center" role="alert">
       {{user._id}}
     </div>
     {{#if msg}}
@@ -11,6 +15,7 @@
         {{msg}}
       </div>
     {{/if}}
+
     <form
       action="/api/users/{{user._id}}/documents"
       enctype="multipart/form-data"

@@ -16,7 +16,7 @@ const agregarAlChango = async (cid, pid) => {
 
     if (response.status === 401) {
         Toastify({
-            text: `🟢 ${response.statusText}`,
+            text: `🟢 Unauthorized`,
             duration: 3000,
             gravity: "top",
             position: "right",

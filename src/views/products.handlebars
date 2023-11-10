@@ -13,6 +13,18 @@
         <p class="m-0"><strong>Rol</strong> {{this.role}}</p>
         {{#if (checkAdmin this.role)}}
           <a href="/users" class="btn btn-success mt-3">Modificar roles</a>
+        {{else if (checkPrem this.role)}}
+          <a
+            href="/api/users/premium/{{this._id}}"
+            class="btn btn-success mt-1"
+          >Volver a user</a>
+        {{else}}
+          <a
+            href="/api/users/{{this._id}}/documents"
+            class="btn btn-success mt-3"
+          >Cargar documentacion</a>
+          <a href="/premium/{{this._id}}" class="btn btn-success mt-1">Ser
+            premium</a>
         {{/if}}
       {{/if}}
     {{/each}}
