@@ -57,6 +57,9 @@ router.get("/carts/:cid", validateLogin, async (req, res, next) => {
       prod.quantity = e.quantity;
       prods.push(prod);
     })
+
+    console.log(prods);
+
     setTimeout(() => {
       res.render("cart", { prods, cid });
     }, 100)
