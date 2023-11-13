@@ -53,16 +53,18 @@ router.get("/carts/:cid", validateLogin, async (req, res, next) => {
     const prods = [];
     cart.products.forEach(async (e) => {
       let prod = await productService.getById(e._id);
+      console.log("prod", prod);
+
       prod = prod.toObject();
       prod.quantity = e.quantity;
       prods.push(prod);
     })
 
-    console.log(prods);
+    console.log("prods", prods);
 
     setTimeout(() => {
       res.render("cart", { prods, cid });
-    }, 100)
+    }, 1000)
 
   } catch (error) {
     log.fatal(error.message);
