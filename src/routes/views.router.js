@@ -25,7 +25,6 @@ import CartController from "../controllers/cart.controllers.js";
 const cartController = new CartController()
 
 import { emailRecoverPass } from "../controllers/email.controller.js";
-import dictionaryError from "../utils/errors.dictionary.js";
 import log from "../utils/logger.js";
 
 const secret = '12345'
@@ -48,24 +47,16 @@ router.get("/carts/:cid", validateLogin, async (req, res, next) => {
   try {
     const { cid } = req.params;
     const cart = await cartService.getById(cid);
-    if (!cart) return http.NotFound(res, dictionaryError.NOT_FOUND);
-
     const prods = [];
-    cart.products.forEach(async (e) => {
-      let prod = await productService.getById(e._id);
-      console.log("prod", prod);
 
+    await Promise.all(cart.products.map(async e => {
+      let prod = await productService.getById(e._id);
       prod = prod.toObject();
       prod.quantity = e.quantity;
       prods.push(prod);
-    })
+    }));
 
-    console.log("prods", prods);
-
-    setTimeout(() => {
-      res.render("cart", { prods, cid });
-    }, 1000)
-
+    res.render("cart", { prods, cid });
   } catch (error) {
     log.fatal(error.message);
   }
