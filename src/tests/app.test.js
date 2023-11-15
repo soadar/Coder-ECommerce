@@ -108,7 +108,7 @@ describe('Tests integrales Api E-Commerce [Products]', () => {
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('data');
         expect(response.body.data).toBeInstanceOf(Object);
-        expect(update.stock).toBe(response.body.data.stock); // data[0] ??
+        expect(update.stock).toBe(response.body.data.stock);
     });
 
     test('[DELETE-PROD] /api/products/', async () => {

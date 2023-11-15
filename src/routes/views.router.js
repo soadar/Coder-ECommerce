@@ -64,6 +64,7 @@ router.get("/carts/:cid", validateLogin, async (req, res, next) => {
 
 router.get('/products', validateLogin, async (req, res) => {
   req.session.isLoggedIn = true
+
   let { page, limit, sort, title, description, code, price, status, stock, category, thumbnails } = req.query;
   const query = {
     title,
@@ -268,7 +269,6 @@ router.get('/ticketView', async (req, res) => {
 router.get('/premium/:uid', async (req, res) => {
   const { uid } = req.params;
   let user = await userService.getById(uid);
-  console.log(user.role);
 
   if (user.role === 'premium') {
     user.role = 'user';
@@ -277,8 +277,6 @@ router.get('/premium/:uid', async (req, res) => {
       res.redirect('/products')
     }, 100)
   } else {
-
-
 
     const doc1 = user.documents.some((element) => element.name.match('document'));
     const doc2 = user.documents.some((element) => element.name.match('address'));

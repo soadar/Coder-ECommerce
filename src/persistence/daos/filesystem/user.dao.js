@@ -50,9 +50,7 @@ export default class UserDaoFS {
         try {
             const usersFile = await this.getUsers();
             const user = usersFile.find((u) => u.id === id);
-            if (user) return user
-            else return false;
-            // return user ? user : false
+            return user ? user : false
         } catch (error) {
             log.fatal(error.message);
         }

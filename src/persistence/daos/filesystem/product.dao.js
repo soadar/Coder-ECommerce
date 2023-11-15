@@ -24,7 +24,6 @@ export default class ProductDaoFS {
       thumbnails: obj.thumbnails
     };
 
-    //checkea que las propiedades contengan algun valor, menos thumbnails
     let sinthumbs = Object.values(producto).slice(0, 8);
     let check = Object.values(sinthumbs).some(
       (element) => element === null || element === "" || element === undefined
@@ -33,13 +32,11 @@ export default class ProductDaoFS {
       return "Todos los cambos son obligatorios";
     }
 
-    //verifica que no haya otro code igual, no valida al primero
     if (await this.getProductByCode(producto.code)) {
       this.counter--;
       return "El codigo del producto esta repetido";
     }
 
-    //genera el archivo
     this.products.push(producto);
     await this.saveFile();
     return `El producto con id: ${producto.id} fue dado de alta`;

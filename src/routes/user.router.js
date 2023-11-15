@@ -68,7 +68,6 @@ router.post('/:uid/documents', validateLogin, cpUpload, async (req, res, next) =
             user.documents.push({ name: `stateAccount_${stateAccount.filename}`, reference: stateAccount.path });
         }
         user.save();
-        //return http.Ok(res, user);
         setTimeout(() => {
             res.redirect('/products')
         }, 100)
