@@ -18,6 +18,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schema/Users/User"
+  /api/users:
+    get:
+      tags:
+        - Users
+      summary: Lista de usuarios
+      description: Lista de usuarios
+      responses:
+        200:
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schema/Users/Users"
+    delete:
+      tags:
+        - Users
+      summary: Elimina los usuarios inactivos
+      description: Elimina los usuarios con mas de 2 dias de inactividad
+      responses:
+        200:
+          description: Elimina los usuarios inactivos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schema/Users/delUsers"
   /api/products:
     get:
       tags:

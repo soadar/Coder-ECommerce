@@ -19,6 +19,58 @@ components:
           status: 200
           msg: Success
           data: data
+      Users:
+        type: object
+        properties:
+          status:
+            type: number
+            description: Código de estado de la petición
+            example: 200
+          message:
+            type: string
+            description: Estado de la petición
+            example: Success
+          data:
+            type: array
+            description: Array de productos dentro del chango
+            items:
+              properties:
+                nombre:
+                  type: string
+                  description: Nombre del usuario
+                  example: 11
+                email:
+                  type: string
+                  description: Email del usuario.
+                  example: 11@11
+                role:
+                  type: string
+                  description: Rol del usuario.
+                  example: user
+      delUsers:
+        type: object
+        properties:
+          status:
+            type: number
+            description: Código de estado de la petición
+            example: 200
+          message:
+            type: string
+            description: Estado de la petición
+            example: Success
+          data:
+            type: array
+            description: Array de productos dentro del chango
+            items:
+              properties:
+                acknowledged:
+                  type: string
+                  description: Si tiene permisos de escritura
+                  example: true
+                deletedCount:
+                  type: string
+                  description: Cantidad de usuarios eliminados.
+                  example: 1
     Products:
       getAllProducts:
         type: array

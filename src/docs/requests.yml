@@ -16,6 +16,22 @@ components:
         example:
           email: 99@99
           password: "99"
+      users:
+        type: object
+        properties:
+          nombre:
+            type: string
+            description: Email del usuario
+          email:
+            type: string
+            description: Password del usuario
+          role:
+            type: string
+            description: Password del usuario
+        example:
+          nombre: 11@11
+          email: "11"
+          role: "11"
       registerNewProduct:
         type: object
         required:
