@@ -246,7 +246,6 @@ router.get('/removeProd', async (req, res) => {
   const { cid, pid } = req.query;
   const chango = await cartService.getById(cid);
   chango.products.map(async (e) => {
-    console.log(e._id._id);
     if (e._id._id == pid) {
       e.quantity -= 1
       if (e.quantity === 0) await cartService.delProdInCart(cid, pid);
