@@ -1,0 +1,41 @@
+<div class="text-center mt-4">
+  <a href="/login" class="btn btn-primary">Volver</a>
+</div>
+<div class="text-center d-flex flex-wrap">
+  {{#if users.length}}
+    {{#each users}}
+      {{#if this.email}}
+        <form
+          class="mx-auto"
+          style="width: 25rem;"
+          action="/modusers?email={{this.email}}"
+          method="post"
+        >
+          <lu class="card list-unstyled m-5">
+            <li class="mt-2"><strong>Nombre:</strong> {{this.nomber}}</li>
+            <li><strong>Email:</strong> {{this.email}}</li>
+            <li class="mb-2"><strong>Rol:</strong> {{this.role}}</li>
+            <button
+              type="submit"
+              name="action"
+              value="mod"
+              class="btn btn-primary"
+            >
+              Modificar rol
+            </button>
+            <button
+              type="submit"
+              name="action"
+              value="del"
+              class="btn btn-danger"
+            >
+              Eliminar
+            </button>
+          </lu>
+        </form>
+      {{/if}}
+    {{/each}}
+  {{else}}
+    <p>No hay usuarios registrados</p>
+  {{/if}}
+</div>

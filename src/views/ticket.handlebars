@@ -1,0 +1,18 @@
+<div class="text-center mt-4">
+  <a href="/" class="btn btn-primary">Inicio</a>
+</div>
+<main class="form-signin w-75 m-auto mt-5">
+
+  <h1 class="h3 mb-3 fw-normal text-center">Ticktet de compra</h1>
+
+  {{#if ticket}}
+    <lu class="card list-unstyled p-2">
+      <li><strong>purchaser:</strong> {{ticket.purchaser}}</li>
+      <li><strong>code:</strong> {{ticket.code}}</li>
+      <li><strong>amount:</strong> $ {{ticket.amount}}</li>
+      <li><strong>purchase_datetime:</strong>
+        {{ticket.purchase_datetime}}
+      </li>
+    </lu>
+  {{/if}}
+</main>
